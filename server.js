@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// serve frontend files
+// serve static frontend files
 app.use(express.static("Public"));
 
 /* ================= MONGODB ================= */
@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI)
 const authRoutes = require("./Routes/auth");
 app.use("/api/auth", authRoutes);
 
-/* ================= GEMINI DEBUG ROUTE ================= */
+/* ================= GEMINI ROUTE ================= */
 app.get("/models", async (req, res) => {
   try {
     const response = await fetch(
