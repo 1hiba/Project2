@@ -75,7 +75,7 @@ app.post("/api/chat", async (req, res) => {
 
 // LOGIN PAGE
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "Public", "login.html"));
+  res.sendFile(path.join(__dirname, "Public", "index.html"));
 });
 
 app.get("/login", (req, res) => {
