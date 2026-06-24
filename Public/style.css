@@ -1,0 +1,108 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f4fff7;
+  margin: 0;
+  color: #1f2a1f;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 15px;
+}
+
+h1 {
+  text-align: center;
+  color: #2e7d32;
+}
+
+/* CHAT BOX */
+.chat-box {
+  height: 400px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* MESSAGES */
+.message {
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 70%;
+  white-space: pre-wrap;
+}
+
+.user {
+  align-self: flex-end;
+  background: #66bb6a;
+  color: white;
+}
+
+.ai {
+  align-self: flex-start;
+  background: #e8f5e9;
+}
+
+/* INPUT AREA */
+.input-area {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+textarea {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #c8e6c9;
+  resize: none;
+}
+
+button {
+  padding: 10px 14px;
+  background: #43a047;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* TYPING */
+.typing {
+  margin-top: 10px;
+  font-style: italic;
+  color: #4caf50;
+}
+
+.hidden {
+  display: none;
+}
+
+.dots::after {
+  content: "";
+  animation: dots 1.2s infinite;
+}
+
+@keyframes dots {
+  0% { content: ""; }
+  33% { content: "."; }
+  66% { content: ".."; }
+  100% { content: "..."; }
+}
+
+/* FOOTER */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 8px;
+  background: #e8f5e9;
+  border-top: 1px solid #c8e6c9;
+  font-size: 13px;
+}
