@@ -8,11 +8,12 @@ const router = express.Router();
 /* ================= REGISTER ================= */
 router.post("/register", async (req, res) => {
   try {
+    console.log("REGISTER HIT:", req.body);
+
     const { username, email, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "Missing fields" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,10 +26,16 @@ router.post("/register", async (req, res) => {
 
     await user.save();
 
+    console.log("USER SAVED");
+
     res.json({ message: "User created successfully" });
 
   } catch (err) {
-    res.status(500).json({ message: "Server error during registration" });
+    console.log("REGISTER ERROR FULL:", err);
+    res.status(500).json({
+      message: err.message,
+      error: err.toString()
+    });
   }
 });
 
