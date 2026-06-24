@@ -10,10 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// serve static frontend files
+// serve frontend files
 app.use(express.static("Public"));
 
-/* ================= MONGODB ================= */
+/* ================= DATABASE ================= */
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log("MongoDB error:", err));
@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI)
 const authRoutes = require("./Routes/auth");
 app.use("/api/auth", authRoutes);
 
-/* ================= GEMINI ROUTE ================= */
+/* ================= GEMINI API ================= */
 app.get("/models", async (req, res) => {
   try {
     const response = await fetch(
@@ -37,7 +37,6 @@ app.get("/models", async (req, res) => {
   }
 });
 
-/* ================= CHAT ROUTE ================= */
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
@@ -73,11 +72,12 @@ app.post("/api/chat", async (req, res) => {
 
 /* ================= FRONTEND ROUTES ================= */
 
-// LOGIN PAGE
+// LANDING PAGE (IMPORTANT FIX)
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "Public", "index.html"));
 });
 
+// LOGIN PAGE
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "Public", "login.html"));
 });
