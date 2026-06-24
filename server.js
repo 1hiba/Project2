@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve frontend
+// serve frontend files
 app.use(express.static("Public"));
 
 /* ================= MONGODB ================= */
@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI)
 const authRoutes = require("./Routes/auth");
 app.use("/api/auth", authRoutes);
 
-/* ================= GEMINI ROUTES ================= */
+/* ================= GEMINI DEBUG ROUTE ================= */
 app.get("/models", async (req, res) => {
   try {
     const response = await fetch(
@@ -37,6 +37,7 @@ app.get("/models", async (req, res) => {
   }
 });
 
+/* ================= CHAT ROUTE ================= */
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
@@ -45,9 +46,7 @@ app.post("/api/chat", async (req, res) => {
       `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           contents: [
             {
@@ -72,10 +71,25 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-/* ================= FRONTEND ROUTE FIX ================= */
-// THIS is the important fix
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "Public", "index.html"));
+/* ================= FRONTEND ROUTES ================= */
+
+// LOGIN PAGE
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "Public", "login.html"));
+});
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "Public", "login.html"));
+});
+
+// REGISTER PAGE
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "Public", "register.html"));
+});
+
+// DASHBOARD PAGE
+app.get("/dashboard", (req, res) => {
+  res.sendFile(path.join(__dirname, "Public", "dashboard.html"));
 });
 
 /* ================= START SERVER ================= */
