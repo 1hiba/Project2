@@ -2,12 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const path = require("path");
 
 const app = express();
 
 /* ================= MIDDLEWARE ================= */
 app.use(cors());
 app.use(express.json());
+
+// Serve frontend
 app.use(express.static("Public"));
 
 /* ================= MONGODB ================= */
@@ -19,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI)
 const authRoutes = require("./Routes/auth");
 app.use("/api/auth", authRoutes);
 
-/* ================= DEBUG: LIST MODELS ================= */
+/* ================= GEMINI ROUTES ================= */
 app.get("/models", async (req, res) => {
   try {
     const response = await fetch(
@@ -34,11 +37,8 @@ app.get("/models", async (req, res) => {
   }
 });
 
-/* ================= CHAT ROUTE ================= */
 app.post("/api/chat", async (req, res) => {
   try {
-    console.log("CHAT ROUTE HIT");
-
     const { message } = req.body;
 
     const response = await fetch(
@@ -61,27 +61,26 @@ app.post("/api/chat", async (req, res) => {
 
     const data = await response.json();
 
-    console.log("FULL RESPONSE:", JSON.stringify(data, null, 2));
-
-    const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     res.json({
       reply: text || "No response from AI"
     });
 
   } catch (err) {
-    console.log("CHAT ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-/* ================= ROOT ================= */
-app.get("/", (req, res) => {
-  res.send("Server is running");
+/* ================= FRONTEND ROUTE FIX ================= */
+// THIS is the important fix
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "Public", "index.html"));
 });
 
 /* ================= START SERVER ================= */
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
